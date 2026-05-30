@@ -1,0 +1,1198 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>舒明琦 | AI4Cities Portfolio</title>
+  <style>
+    :root {
+      --ink: #20262c;
+      --muted: #687780;
+      --blue: #72b8e8;
+      --blue-deep: #2f8fd8;
+      --pink: #f4adc2;
+      --pink-soft: #fff0f5;
+      --blue-soft: #edf8ff;
+      --paper: #fbfdff;
+      --line: #d9eaf4;
+      --card: rgba(255,255,255,.9);
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; height: 100%; overflow: hidden; }
+    body {
+      color: var(--ink);
+      background: var(--paper);
+      font-family: DengXian, "等线", "Microsoft YaHei", Arial, sans-serif;
+    }
+    a { color: inherit; text-decoration: none; }
+    img { display: block; max-width: 100%; }
+
+    .topbar {
+      position: fixed;
+      z-index: 50;
+      inset: 0 0 auto;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 34px;
+      border-bottom: 1px solid rgba(217,234,244,.8);
+      background: rgba(251,253,255,.86);
+      backdrop-filter: blur(14px);
+    }
+    .brand {
+      color: var(--blue-deep);
+      font-family: "Times New Roman", Times, serif;
+      font-size: 22px;
+      font-weight: 700;
+    }
+    .nav {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .nav button, .download {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: white;
+      color: var(--muted);
+      height: 34px;
+      padding: 0 13px;
+      font: inherit;
+      font-size: 13px;
+      cursor: pointer;
+    }
+    .download {
+      display: inline-flex;
+      align-items: center;
+      color: white;
+      background: var(--blue-deep);
+      border-color: var(--blue-deep);
+      font-weight: 700;
+    }
+    .nav button.active {
+      color: white;
+      background: var(--blue);
+      border-color: var(--blue);
+    }
+
+    .deck {
+      height: 100vh;
+      display: flex;
+      overflow-x: auto;
+      overflow-y: hidden;
+      scroll-snap-type: x mandatory;
+      scroll-behavior: smooth;
+    }
+    .deck::-webkit-scrollbar { display: none; }
+    .slide {
+      position: relative;
+      flex: 0 0 100vw;
+      height: 100vh;
+      padding: 92px 58px 42px;
+      scroll-snap-align: start;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 16% 20%, rgba(244,173,194,.23), transparent 28%),
+        radial-gradient(circle at 82% 18%, rgba(114,184,232,.22), transparent 30%),
+        linear-gradient(135deg, #fff, #f8fcff);
+    }
+    .slide::after {
+      content: "";
+      position: absolute;
+      right: 48px;
+      bottom: 36px;
+      width: 170px;
+      height: 170px;
+      border: 18px solid rgba(114,184,232,.18);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .slide-inner {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: grid;
+      grid-template-columns: 42% 58%;
+      gap: 28px;
+      align-items: center;
+    }
+    .cover .slide-inner,
+    .contact .slide-inner {
+      grid-template-columns: 1fr;
+      place-items: center;
+      text-align: center;
+    }
+    .label {
+      color: var(--blue-deep);
+      font-family: "Times New Roman", Times, serif;
+      font-size: 18px;
+      font-weight: 700;
+      margin: 0 0 10px;
+    }
+    h1, h2 {
+      margin: 0;
+      line-height: 1.06;
+      letter-spacing: 0;
+    }
+    h1 {
+      color: var(--blue);
+      font-size: clamp(50px, 6.7vw, 96px);
+      font-family: "Times New Roman", Times, serif;
+      font-weight: 700;
+    }
+    h2 {
+      color: var(--blue);
+      font-size: clamp(42px, 5.6vw, 78px);
+      font-family: "Times New Roman", Times, serif;
+      font-weight: 700;
+    }
+    .subtitle {
+      margin: 12px 0 0;
+      color: var(--blue-deep);
+      font-size: 24px;
+      font-weight: 700;
+    }
+    .lead {
+      margin: 20px 0 0;
+      max-width: 680px;
+      color: var(--muted);
+      font-size: 17px;
+      line-height: 1.75;
+    }
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 24px;
+    }
+    .cover .actions,
+    .contact .actions {
+      justify-content: center;
+    }
+    .cover .lead,
+    .contact .lead {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      border-radius: 999px;
+      padding: 0 18px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--blue-deep);
+      font-weight: 700;
+    }
+    .button.primary {
+      background: var(--blue-deep);
+      color: white;
+      border-color: var(--blue-deep);
+    }
+
+    .visual {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      overflow: hidden;
+      box-shadow: 0 22px 60px rgba(47,143,216,.13);
+    }
+    .visual img {
+      width: 100%;
+      height: 54vh;
+      object-fit: cover;
+      background: #eef7fc;
+    }
+    .research-feature {
+      min-height: 54vh;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background:
+        linear-gradient(135deg, rgba(237,248,255,.95), rgba(255,240,245,.72)),
+        white;
+    }
+    .research-feature .type,
+    .paper-cover .type {
+      color: var(--blue-deep);
+      font-family: "Times New Roman", Times, serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .research-feature h3,
+    .paper-cover h4 {
+      margin: 8px 0 0;
+      color: var(--ink);
+      font-family: "Times New Roman", Times, serif;
+      line-height: 1.1;
+    }
+    .research-feature h3 { font-size: clamp(28px, 3.2vw, 44px); }
+    .research-feature .cn-title,
+    .paper-cover .cn-title {
+      margin-top: 8px;
+      color: var(--muted);
+      font-weight: 700;
+    }
+    .research-feature .summary {
+      display: grid;
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .research-columns {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 18px;
+    }
+    .research-col {
+      min-height: 126px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      background: rgba(255,255,255,.78);
+      padding: 12px;
+    }
+    .research-col strong {
+      display: block;
+      margin-bottom: 8px;
+      color: var(--blue-deep);
+      font-size: 13px;
+    }
+    .research-col span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+    .comic-preview {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: 210px minmax(0, 1fr);
+      gap: 14px;
+      align-items: stretch;
+      cursor: pointer;
+    }
+    .comic-note {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 14px;
+      background: rgba(255,255,255,.82);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 136px;
+    }
+    .comic-note strong {
+      color: var(--blue-deep);
+      font-size: 15px;
+    }
+    .comic-note span {
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+      margin-top: 8px;
+    }
+    .comic-note em {
+      width: fit-content;
+      margin-top: 12px;
+      border-radius: 999px;
+      padding: 5px 10px;
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+      font-style: normal;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .comic-source {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 11px;
+      line-height: 1.45;
+    }
+    .comic-source a {
+      color: var(--blue-deep);
+      font-weight: 700;
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .comic-strip {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+    }
+    .comic-card {
+      margin: 0;
+      position: relative;
+      min-height: 136px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 12px 28px rgba(47,143,216,.12);
+    }
+    .comic-card:nth-child(2) { transform: translateY(10px); }
+    .comic-card img {
+      width: 100%;
+      height: 136px;
+      object-fit: cover;
+      object-position: top center;
+      filter: saturate(.96);
+    }
+    .comic-card figcaption {
+      position: absolute;
+      left: 8px;
+      bottom: 8px;
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: rgba(255,255,255,.9);
+      color: var(--blue-deep);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .paper-cover .research-columns {
+      gap: 7px;
+      margin-top: 12px;
+    }
+    .paper-cover .research-col {
+      min-height: 82px;
+      padding: 8px;
+    }
+    .paper-cover .research-col strong {
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+    .paper-cover .research-col span {
+      font-size: 11px;
+      line-height: 1.35;
+    }
+    .summary-line {
+      border-left: 4px solid var(--blue);
+      border-radius: 8px;
+      background: rgba(255,255,255,.76);
+      padding: 10px 12px;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .visual-caption {
+      padding: 14px 16px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .bubble {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 0 10px;
+      border-radius: 999px;
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .bubble.role {
+      display: flex;
+      width: 100%;
+      min-height: 38px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      line-height: 1.45;
+      justify-content: flex-start;
+      white-space: normal;
+    }
+    .bubble.pink {
+      color: #bf5f78;
+      background: var(--pink-soft);
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .card {
+      min-height: 136px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: var(--card);
+      padding: 16px;
+      box-shadow: 0 12px 38px rgba(47,143,216,.08);
+    }
+    .card h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      color: var(--ink);
+    }
+    .card p, .card li {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.62;
+    }
+    .card ul {
+      padding-left: 18px;
+      margin: 8px 0 0;
+    }
+    .wide { grid-column: span 2; }
+    .project-board {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .project {
+      position: relative;
+      overflow: hidden;
+      min-height: 230px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: white;
+      cursor: pointer;
+    }
+    .project img {
+      width: 100%;
+      height: 152px;
+      object-fit: cover;
+    }
+    .project-cover {
+      height: 152px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 90% 18%, rgba(114,184,232,.28), transparent 26%),
+        linear-gradient(135deg, rgba(237,248,255,.98), rgba(255,240,245,.68));
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .project-cover .type {
+      color: var(--blue-deep);
+      font-family: "Times New Roman", Times, serif;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+    }
+    .project-cover h4 {
+      margin: 6px 0 0;
+      color: var(--ink);
+      font-family: "Times New Roman", Times, serif;
+      font-size: 22px;
+      line-height: 1.1;
+    }
+    .project-cover .cn-title {
+      color: var(--muted);
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .project .info {
+      padding: 12px 14px;
+    }
+    .project h3 {
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+    .project p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.45;
+    }
+    .paper-board {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 14px;
+    }
+    .paper {
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      background: white;
+      box-shadow: 0 14px 42px rgba(47,143,216,.09);
+      cursor: pointer;
+    }
+    .paper img {
+      width: 100%;
+      height: 230px;
+      object-fit: cover;
+    }
+    .paper-cover {
+      height: 230px;
+      padding: 18px;
+      border-bottom: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 88% 18%, rgba(114,184,232,.28), transparent 26%),
+        linear-gradient(135deg, rgba(237,248,255,.98), rgba(255,240,245,.62));
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    .paper-cover h4 {
+      font-size: 24px;
+    }
+    .paper-cover .summary-line {
+      padding: 8px 10px;
+      font-size: 12px;
+      background: rgba(255,255,255,.82);
+    }
+    .paper .info {
+      padding: 14px;
+    }
+    .paper h3 {
+      margin: 0 0 8px;
+      font-size: 16px;
+    }
+    .paper p {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .hint {
+      position: fixed;
+      left: 50%;
+      bottom: 16px;
+      transform: translateX(-50%);
+      color: #9aa9b0;
+      font-size: 12px;
+      z-index: 60;
+    }
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 34px;
+      background: rgba(24, 32, 39, .58);
+      backdrop-filter: blur(16px);
+    }
+    .modal.open { display: flex; }
+    .modal-card {
+      width: min(1180px, 96vw);
+      height: min(760px, 88vh);
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 280px;
+      box-shadow: 0 26px 90px rgba(0,0,0,.28);
+    }
+    .modal-stage {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      background: #f5f9fc;
+      overflow: auto;
+      padding: 24px;
+    }
+    .modal-stage img {
+      width: min(100%, 1200px);
+      height: auto;
+      max-height: none;
+      object-fit: initial;
+      box-shadow: 0 10px 32px rgba(30, 70, 95, .12);
+      background: white;
+    }
+    .modal-side {
+      border-left: 1px solid var(--line);
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+    }
+    .modal-side h3 {
+      margin: 0;
+      font-size: 22px;
+      line-height: 1.25;
+    }
+    .modal-side p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+    .modal-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+    .modal-actions button,
+    .close-modal {
+      height: 36px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: white;
+      color: var(--blue-deep);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0 13px;
+    }
+    .close-modal {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 2;
+      background: rgba(255,255,255,.9);
+    }
+    .thumb-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 7px;
+      overflow: auto;
+      max-height: 210px;
+      padding-right: 2px;
+    }
+    .thumb-strip button {
+      padding: 0;
+      border: 2px solid transparent;
+      border-radius: 7px;
+      overflow: hidden;
+      background: #eef7fc;
+      cursor: pointer;
+      aspect-ratio: 1.35;
+    }
+    .thumb-strip button.active { border-color: var(--blue-deep); }
+    .thumb-strip img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .research-modal-card {
+      width: min(1240px, 96vw);
+      height: min(820px, 90vh);
+      border-radius: 16px;
+      background: #fff;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 320px;
+      box-shadow: 0 26px 90px rgba(0,0,0,.28);
+    }
+    .pdf-stage {
+      background: #eef5f9;
+      min-width: 0;
+    }
+    .pdf-stage iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: white;
+    }
+    .research-side {
+      position: relative;
+      border-left: 1px solid var(--line);
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+    .research-side h3 {
+      margin: 0;
+      font-size: 24px;
+      line-height: 1.25;
+    }
+    .research-side p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.7;
+    }
+    .research-link {
+      margin-top: auto;
+    }
+    .research-detail-grid {
+      display: grid;
+      gap: 8px;
+    }
+    .research-detail-grid .research-col {
+      min-height: auto;
+    }
+
+    @media (max-width: 960px) {
+      html, body { overflow: auto; }
+      .deck { display: block; height: auto; overflow: visible; }
+      .slide { height: auto; min-height: 100vh; overflow: visible; padding: 88px 22px 54px; }
+      .slide-inner { grid-template-columns: 1fr; height: auto; }
+      .nav button { display: none; }
+      .card-grid, .project-board, .paper-board { grid-template-columns: 1fr; }
+      .wide { grid-column: auto; }
+      .visual img { height: 320px; }
+      .comic-preview { grid-template-columns: 1fr; }
+      .comic-strip { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .comic-card img { height: 118px; }
+      .hint { display: none; }
+      .modal { padding: 12px; }
+      .modal-card { height: 92vh; grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
+      .research-modal-card { height: 92vh; grid-template-columns: 1fr; grid-template-rows: minmax(0, 1fr) auto; }
+      .modal-side { border-left: 0; border-top: 1px solid var(--line); }
+      .research-side { border-left: 0; border-top: 1px solid var(--line); }
+      .thumb-strip { grid-template-columns: repeat(6, 1fr); max-height: 82px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#cover">Mingqi Shu</a>
+    <nav class="nav" aria-label="页面导航">
+      <button data-target="cover">封面</button>
+      <button data-target="ai">AI/LLM</button>
+      <button data-target="gis">GIS/Data</button>
+      <button data-target="planning">Planning</button>
+      <button data-target="visual">Visual</button>
+      <button data-target="research">Research</button>
+      <a class="download" href="assets/docs/resume.pdf">下载简历</a>
+    </nav>
+  </header>
+
+  <main class="deck" id="deck">
+    <section class="slide cover" id="cover">
+      <div class="slide-inner">
+        <div>
+          <p class="label">AI4Cities Workshop Portfolio</p>
+          <h1>Urban Planning, GIS & AI</h1>
+          <p class="subtitle">舒明琦 Mingqi Shu</p>
+          <p class="lead">同济大学建筑与城市规划学院硕士研究生。我的背景交汇于城市规划、城市研究、地理信息系统与 AI 应用，擅长把城市议题转译为数据流程、空间模型、图面表达与研究叙事。</p>
+          <div class="actions">
+            <a class="button primary" href="#ai">横向浏览作品</a>
+            <a class="button" href="assets/docs/resume.pdf">下载简历</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="ai">
+      <div class="slide-inner">
+        <div>
+          <p class="label">Skill 01</p>
+          <h2>AI / LLM</h2>
+          <p class="subtitle">街景图像、多模态理解、Prompt 与 LoRA</p>
+          <p class="lead">将街道品质、舒适性、可步行性这类规划判断拆解为可训练、可解释的图像理解任务，并探索 LLM/Agent 对城市材料整理和空间诊断的辅助能力。</p>
+          <div class="card-grid" style="margin-top:18px">
+            <div class="card"><h3>任务拆解</h3><p>把“舒适性”转化为层级指标、标注规则和模型可识别的视觉特征。</p></div>
+            <div class="card"><h3>模型实践</h3><p>完成训练集标注、LoRA 训练、Prompt 设计与模型输出比较。</p></div>
+          </div>
+        </div>
+        <div class="visual">
+          <div class="research-feature">
+            <div>
+              <div class="type">Research Article</div>
+              <h3>Street Walkability Inference</h3>
+              <div class="cn-title">基于街景图像与预训练大模型的街道可步行性推断</div>
+              <div class="research-columns">
+                <div class="research-col"><strong>研究问题</strong><span>大规模街道可步行性评估不仅要判断“是否可走”，还要解释街道为何表现不足、如何改善。</span></div>
+                <div class="research-col"><strong>方法关键词</strong><span>街景图像、预训练多模态大模型、LoRA 微调、Prompt engineering、步行需求层级。</span></div>
+                <div class="research-col"><strong>本人贡献</strong><span>舒适性层级指标制定、训练集标注、LoRA 训练、Prompt 迭代与结果解释。</span></div>
+              </div>
+              <div class="comic-preview" data-gallery="walkability-comic" role="button" tabindex="0" aria-label="浏览街道可步行性论文科普漫画">
+                <div class="comic-note">
+                  <div>
+                    <strong>论文科普漫画</strong>
+                    <span>把模型训练、层级诊断和上海内环实证转译成可快速阅读的图文说明，用于研究传播与成果展示。</span>
+                  </div>
+                  <em>点击浏览 3 张长图</em>
+                  <div class="comic-source">来源: 公众号 <a href="https://mp.weixin.qq.com/s/TC-d-urPwf908HtTT09_jg" target="_blank" rel="noopener">SAPS城市空间分析与规划支持研究</a>，非独立完成。</div>
+                </div>
+                <div class="comic-strip">
+                  <figure class="comic-card"><img src="assets/comics/walkability-9.jpg" alt="街道可步行性诊断案例漫画"><figcaption>案例诊断</figcaption></figure>
+                  <figure class="comic-card"><img src="assets/comics/walkability-6.jpg" alt="LoRA 分层诊断漫画"><figcaption>LoRA 诊断</figcaption></figure>
+                  <figure class="comic-card"><img src="assets/comics/walkability-8.jpg" alt="上海内环范围实证分析漫画"><figcaption>上海实证</figcaption></figure>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="visual-caption">
+            <span class="bubble pink role">本人负责: 舒适性指标制定 / 训练集标注 / LoRA 训练 / Prompt 迭代<br>My role: comfort indicators, dataset labeling, LoRA fine-tuning and prompt iteration.</span>
+            <span class="bubble">训练集标注</span>
+            <span class="bubble">LoRA 训练</span>
+            <span class="bubble">Prompt 迭代</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="gis">
+      <div class="slide-inner">
+        <div>
+          <p class="label">Skill 02</p>
+          <h2>GIS / Data</h2>
+          <p class="subtitle">多源数据、指标体系与空间解释</p>
+          <p class="lead">围绕跨城通勤、设施选址、商业区位和产业协同等问题，处理多源城市数据，建立可比较的指标体系，并通过地图和图表把结论讲清楚。</p>
+          <div class="card-grid" style="margin-top:18px">
+            <div class="card"><h3>跨城通勤</h3><p>负责数据处理、第五章写作，参与城市样本整理、指标设计与图表表达。</p></div>
+            <div class="card"><h3>空间选址</h3><p>整合人口、道路、服务半径和风险约束，输出适宜性分区与候选点比较。</p></div>
+          </div>
+        </div>
+        <div class="project-board">
+          <article class="project" data-research="commuting-report"><div class="project-cover"><div><div class="type">Annual Report</div><h4>Intercity Commuting</h4></div><div class="cn-title">2025 长三角跨城通勤年度报告</div></div><div class="info"><h3>2025 长三角跨城通勤年度报告</h3><p>本人负责: 数据处理 / 第五章写作 / 指标与图表整理。点击浏览 PDF 详情。</p></div></article>
+          <article class="project" data-gallery="gis-shelter"><img src="assets/images/gis-shelter.jpg" alt="GIS 选址分析"><div class="info"><h3>多目标紧急避难场所选址</h3><p>ArcGIS、服务半径、风险约束、空间适宜性评价。点击浏览全部图片。</p></div></article>
+          <article class="project" data-gallery="hotel-site"><img src="assets/images/hotel-site.jpg" alt="酒店选址分析"><div class="info"><h3>汉庭与白玉兰选址分析</h3><p>交通、商业、景点、地租与竞品变量拆解。点击浏览全部图片。</p></div></article>
+          <article class="project" data-gallery="nev-industry"><img src="assets/images/nev-industry.jpg" alt="新能源汽车产业研究"><div class="info"><h3>新能源汽车产业协同研究</h3><p>产业链数据、区域区位优势与协同效应可视化。点击浏览全部图片。</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="planning">
+      <div class="slide-inner">
+        <div>
+          <p class="label">Skill 03</p>
+          <h2>Planning</h2>
+          <p class="subtitle">城市设计、总体规划与乡村韧性</p>
+          <p class="lead">保留城乡规划训练中的“调研-问题-策略-空间-实施”链条，把数据分析和 AI 结果落到真实空间、规划语言和可讨论的方案表达中。</p>
+          <div class="card wide" style="margin-top:18px">
+            <h3>代表经历</h3>
+            <ul>
+              <li>WUPENicity 城市设计国际竞赛二等奖: 主要负责人，参与目标愿景、策略与图纸表达。</li>
+              <li>南汇新城总体规划: 负责交通体系、综合防灾与发展战略相关内容。</li>
+              <li>乡村规划竞赛《安澜》: 负责 ArcGIS 水文、雨洪分析及主要图纸表达。</li>
+            </ul>
+          </div>
+        </div>
+        <div class="project-board">
+          <article class="project" data-gallery="urban-design"><img src="assets/images/urban-design.jpg" alt="城市设计竞赛"><div class="info"><h3>旧梦虬江: 实验新纪元</h3><p>城市更新策略、总平面、效果图与策略分析图。点击浏览全部图片。</p></div></article>
+          <article class="project" data-gallery="nanhui-masterplan"><img src="assets/images/nanhui-masterplan.jpg" alt="南汇新城总规"><div class="info"><h3>南汇新城总体规划</h3><p>交通体系、综合防灾、发展战略。点击浏览全部图片。</p></div></article>
+          <article class="project" data-gallery="rural-planning"><img src="assets/images/rural-planning.jpg" alt="乡村规划"><div class="info"><h3>乡村规划竞赛《安澜》</h3><p>平急两用、水文雨洪、村庄发展模式。点击浏览全部图片。</p></div></article>
+          <article class="project" data-gallery="micro-renewal"><img src="assets/images/micro-renewal.jpg" alt="城市微更新"><div class="info"><h3>城市微更新设计</h3><p>慢行体验、公共活动与街区界面修复。点击浏览全部图片。</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="visual">
+      <div class="slide-inner">
+        <div>
+          <p class="label">Skill 04</p>
+          <h2>Visual Story</h2>
+          <p class="subtitle">报告、展板、网页与研究叙事</p>
+          <p class="lead">AI4Cities 的成果需要被快速理解。我可以把技术结果转译成论文图表、年度报告、竞赛展板和网页展示，兼顾学术解释、规划语境与公众可读性。</p>
+          <div class="card-grid" style="margin-top:18px">
+            <div class="card"><h3>研究表达</h3><p>组织章节结构、图表逻辑、地图表达和结论文字。</p></div>
+            <div class="card"><h3>图面整合</h3><p>规划图纸、研究海报、展板排版和最终汇报表达。</p></div>
+          </div>
+        </div>
+        <div class="project-board">
+          <article class="project" data-gallery="community-center"><img src="assets/images/community-center.jpg" alt="社区中心设计"><div class="info"><h3>社区中心设计</h3><p>空间组织、图面表达、场景化呈现。点击浏览全部图片。</p></div></article>
+          <article class="project" data-gallery="sustainable-report"><img src="assets/images/sustainable-report.jpg" alt="可持续调研报告"><div class="info"><h3>可持续调研报告</h3><p>调研材料组织与报告视觉叙事。点击浏览全部图片。</p></div></article>
+          <article class="project wide" data-research="aesop-cycling"><div class="project-cover"><div><div class="type">Conference Paper</div><h4>Wujiaochang Cycling Policy</h4></div><div class="cn-title">禁骑政策影响与骑行环境偏好</div></div><div class="info"><h3>AESOP 慢行交通论文</h3><p>本人负责: 人工采集数据 / 禁骑政策影响分析 / 居民骑行环境偏好讨论。点击浏览 PDF 详情。</p></div></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide" id="research">
+      <div class="slide-inner" style="grid-template-columns: 32% 68%">
+        <div>
+          <p class="label">Research Outputs</p>
+          <h2>论文与报告</h2>
+          <p class="lead">研究型成果单独整理，突出论文/报告主题和本人负责的工作。点击可打开本地 PDF。</p>
+        </div>
+        <div class="paper-board">
+          <article class="paper" data-research="walkability-ai">
+            <div class="paper-cover">
+              <div>
+                <div class="type">Article</div>
+                <h4>Street Walkability Inference</h4>
+                <div class="cn-title">街景图像 × 预训练大模型 × 可步行性</div>
+              </div>
+              <div class="research-columns">
+                <div class="research-col"><strong>研究问题</strong><span>解释街道为何不可步行。</span></div>
+                <div class="research-col"><strong>方法关键词</strong><span>SVI + LoRA + Prompt。</span></div>
+                <div class="research-col"><strong>本人贡献</strong><span>舒适性指标与标注训练。</span></div>
+              </div>
+            </div>
+            <div class="info">
+              <h3>Street Walkability Inference</h3>
+              <span class="bubble pink role">本人负责: 舒适性层级指标制定、训练集标注、LoRA训练、漫画宣传稿<br>My role: comfort indicators, dataset labeling, LoRA fine-tuning and comic-style outreach.</span>
+              <span class="bubble">训练集标注</span>
+              <span class="bubble">LoRA 训练</span>
+              <p><a href="assets/docs/street-walkability-paper.pdf">打开 PDF</a></p>
+            </div>
+          </article>
+          <article class="paper" data-research="aesop-cycling">
+            <div class="paper-cover">
+              <div>
+                <div class="type">Conference Paper</div>
+                <h4>Wujiaochang Cycling Policy</h4>
+                <div class="cn-title">五角场禁骑政策影响与骑行环境偏好</div>
+              </div>
+              <div class="research-columns">
+                <div class="research-col"><strong>研究问题</strong><span>禁骑政策下二级道路承接是否有效。</span></div>
+                <div class="research-col"><strong>方法关键词</strong><span>人工采集 + 街景/传感指标。</span></div>
+                <div class="research-col"><strong>本人贡献</strong><span>数据采集、政策影响与偏好分析。</span></div>
+              </div>
+            </div>
+            <div class="info">
+              <h3>Wujiaochang Cycling Policy</h3>
+              <span class="bubble pink role">本人负责: 人工采集数据、禁骑政策影响分析、居民骑行环境偏好讨论<br>My role: manual data collection, policy impact analysis and cycling preference discussion.</span>
+              <span class="bubble">政策影响分析</span>
+              <span class="bubble">骑行环境偏好</span>
+              <p><a href="assets/docs/aesop-wujiaochang-paper.pdf">打开 PDF</a></p>
+            </div>
+          </article>
+          <article class="paper" data-research="commuting-report">
+            <div class="paper-cover">
+              <div>
+                <div class="type">Annual Report</div>
+                <h4>Intercity Commuting Report</h4>
+                <div class="cn-title">2025 长三角城市跨城通勤年度报告</div>
+              </div>
+              <div class="research-columns">
+                <div class="research-col"><strong>研究问题</strong><span>跨城通勤如何刻画都市圈演进。</span></div>
+                <div class="research-col"><strong>方法关键词</strong><span>手机信令、流量流向与空间分布。</span></div>
+                <div class="research-col"><strong>本人贡献</strong><span>数据处理、第五章写作、图表整理。</span></div>
+              </div>
+            </div>
+            <div class="info">
+              <h3>长三角跨城通勤年度报告</h3>
+              <span class="bubble pink role">本人负责: 数据处理、第五章写作、指标与图表整理<br>My role: data processing, Chapter 5 writing, indicator and chart organization.</span>
+              <span class="bubble">第五章写作</span>
+              <span class="bubble">图表整理</span>
+              <p>跨城通勤作为都市圈形成与演进的重要表征，为区域协同发展与空间规划提供观察视角。</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="slide contact" id="contact">
+      <div class="slide-inner">
+        <div>
+          <p class="label">Contact</p>
+          <h2>Thank you.</h2>
+          <p class="subtitle">舒明琦 Mingqi Shu</p>
+          <p class="lead">同济大学建筑与城市规划学院 | 城乡规划方法与技术<br>Tel: 18132668600 | Email: smq18132668600@163.com | WeChat: TJ_smq</p>
+          <div class="actions">
+            <a class="button primary" href="assets/docs/resume.pdf">下载简历</a>
+            <a class="button" href="#cover">回到封面</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="hint">鼠标滚轮 / 方向键左右切换页面</div>
+  <div class="modal" id="galleryModal" aria-hidden="true">
+    <div class="modal-card" role="dialog" aria-modal="true" aria-label="项目图片浏览">
+      <div class="modal-stage">
+        <button class="close-modal" type="button">关闭</button>
+        <img id="modalImage" alt="">
+      </div>
+      <aside class="modal-side">
+        <h3 id="modalTitle"></h3>
+        <p id="modalRole"></p>
+        <div id="modalTags"></div>
+        <p id="modalCount"></p>
+        <div class="thumb-strip" id="thumbStrip"></div>
+        <div class="modal-actions">
+          <button id="modalPrev" type="button">上一张</button>
+          <button id="modalNext" type="button">下一张</button>
+        </div>
+      </aside>
+    </div>
+  </div>
+  <div class="modal" id="researchModal" aria-hidden="true">
+    <div class="research-modal-card" role="dialog" aria-modal="true" aria-label="科研成果详情">
+      <div class="pdf-stage">
+        <iframe id="researchPdf" title="科研成果 PDF"></iframe>
+      </div>
+      <aside class="research-side">
+        <button class="close-modal" id="closeResearch" type="button">关闭</button>
+        <h3 id="researchTitle"></h3>
+        <p id="researchRole"></p>
+        <div id="researchTags"></div>
+        <div class="research-detail-grid" id="researchDetailGrid"></div>
+        <p id="researchHint">PDF 可在左侧直接浏览；如果浏览器限制内嵌 PDF，可以点击下方按钮在新标签打开。</p>
+        <a class="button primary research-link" id="researchOpen" href="#" target="_blank" rel="noreferrer">打开 PDF</a>
+      </aside>
+    </div>
+  </div>
+
+  <script src="assets/gallery-data.js"></script>
+  <script>
+    const deck = document.querySelector("#deck");
+    const slides = Array.from(document.querySelectorAll(".slide"));
+    const navButtons = Array.from(document.querySelectorAll(".nav button"));
+    const galleryMap = new Map((window.PORTFOLIO_GALLERIES || []).map((item) => [item.slug, item]));
+    const modal = document.querySelector("#galleryModal");
+    const modalImage = document.querySelector("#modalImage");
+    const modalTitle = document.querySelector("#modalTitle");
+    const modalRole = document.querySelector("#modalRole");
+    const modalTags = document.querySelector("#modalTags");
+    const modalCount = document.querySelector("#modalCount");
+    const thumbStrip = document.querySelector("#thumbStrip");
+    const closeModal = document.querySelector(".close-modal");
+    const modalPrev = document.querySelector("#modalPrev");
+    const modalNext = document.querySelector("#modalNext");
+    const researchModal = document.querySelector("#researchModal");
+    const researchPdf = document.querySelector("#researchPdf");
+    const researchTitle = document.querySelector("#researchTitle");
+    const researchRole = document.querySelector("#researchRole");
+    const researchTags = document.querySelector("#researchTags");
+    const researchDetailGrid = document.querySelector("#researchDetailGrid");
+    const researchOpen = document.querySelector("#researchOpen");
+    const closeResearch = document.querySelector("#closeResearch");
+    const researchDetails = {
+      "walkability-ai": [
+        ["研究问题", "大规模街道可步行性评估需要识别哪些街道需要改善，并解释为何表现不足、如何提出空间建议。"],
+        ["方法关键词", "街景图像、预训练多模态大模型、LoRA 微调、Prompt engineering、步行需求层级；论文实证使用上海内环 17,937 张街景图像。"],
+        ["本人贡献", "舒适性层级指标制定、训练集标注、LoRA 训练、Prompt 迭代与结果解释。"]
+      ],
+      "aesop-cycling": [
+        ["研究问题", "五角场禁骑政策使部分道路无法通行非机动车，二级道路是否能安全有效地承担绕行功能仍需评估。"],
+        ["方法关键词", "人工采集数据、传感器与街景技术、道路平整度、光照强度、空间特征、居民骑行环境偏好。"],
+        ["本人贡献", "作为主要撰写者参与人工采集数据、禁骑政策影响分析与居民骑行环境偏好讨论。"]
+      ],
+      "commuting-report": [
+        ["研究问题", "跨城通勤是刻画都市圈形成与演进的重要表征，报告聚焦上海与周边城市之间的通勤联系。"],
+        ["方法关键词", "中国联通匿名手机信令数据、流量/流向/空间分布、上海跨城通勤总体特征及五个核心议题。"],
+        ["本人贡献", "负责数据处理、第五章写作、指标与图表整理，将复杂通勤数据组织为可解释的数据叙事。"]
+      ]
+    };
+    let current = 0;
+    let lock = false;
+    let activeGallery = null;
+    let activeImage = 0;
+
+    function go(index) {
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      slides[current].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
+      updateNav();
+    }
+
+    function updateNav() {
+      const index = Math.round(deck.scrollLeft / window.innerWidth);
+      current = Math.max(0, Math.min(slides.length - 1, index));
+      navButtons.forEach((button) => button.classList.toggle("active", button.dataset.target === slides[current].id));
+      history.replaceState(null, "", "#" + slides[current].id);
+    }
+
+    navButtons.forEach((button) => {
+      button.addEventListener("click", () => {
+        const index = slides.findIndex((slide) => slide.id === button.dataset.target);
+        go(index);
+      });
+    });
+
+    deck.addEventListener("scroll", () => requestAnimationFrame(updateNav));
+    deck.addEventListener("wheel", (event) => {
+      if (window.matchMedia("(max-width: 960px)").matches) return;
+      event.preventDefault();
+      if (lock) return;
+      lock = true;
+      const delta = Math.abs(event.deltaX) > Math.abs(event.deltaY) ? event.deltaX : event.deltaY;
+      go(current + (delta > 0 ? 1 : -1));
+      setTimeout(() => { lock = false; }, 480);
+    }, { passive: false });
+    window.addEventListener("keydown", (event) => {
+      if (modal.classList.contains("open") || researchModal.classList.contains("open")) return;
+      if (event.key === "ArrowRight") go(current + 1);
+      if (event.key === "ArrowLeft") go(current - 1);
+    });
+
+    const initial = slides.findIndex((slide) => "#" + slide.id === location.hash);
+    go(initial >= 0 ? initial : 0);
+
+    function renderGalleryImage(index) {
+      if (!activeGallery || !activeGallery.images.length) return;
+      activeImage = (index + activeGallery.images.length) % activeGallery.images.length;
+      modalImage.src = activeGallery.images[activeImage];
+      modalImage.alt = `${activeGallery.title} ${activeImage + 1}`;
+      modalCount.textContent = `${activeImage + 1} / ${activeGallery.images.length}`;
+      thumbStrip.querySelectorAll("button").forEach((button, idx) => button.classList.toggle("active", idx === activeImage));
+    }
+
+    function openGallery(slug) {
+      const item = galleryMap.get(slug);
+      if (!item) return;
+      activeGallery = item;
+      activeImage = 0;
+      modalTitle.textContent = item.title;
+      modalRole.textContent = item.role;
+      modalTags.innerHTML = item.tags.map((tag) => `<span class="bubble">${tag}</span>`).join(" ");
+      thumbStrip.innerHTML = "";
+      item.images.forEach((src, idx) => {
+        const button = document.createElement("button");
+        button.type = "button";
+        button.innerHTML = `<img src="${src}" alt="${item.title} 缩略图 ${idx + 1}">`;
+        button.addEventListener("click", () => renderGalleryImage(idx));
+        thumbStrip.appendChild(button);
+      });
+      modal.classList.add("open");
+      modal.setAttribute("aria-hidden", "false");
+      renderGalleryImage(0);
+    }
+
+    function hideGallery() {
+      modal.classList.remove("open");
+      modal.setAttribute("aria-hidden", "true");
+      activeGallery = null;
+    }
+
+    function openResearch(slug) {
+      const item = galleryMap.get(slug);
+      if (!item || !item.pdf) return;
+      researchTitle.textContent = item.title;
+      researchRole.textContent = item.role;
+      researchTags.innerHTML = item.tags.map((tag) => `<span class="bubble">${tag}</span>`).join(" ");
+      researchDetailGrid.innerHTML = (researchDetails[slug] || []).map(([label, text]) => (
+        `<div class="research-col"><strong>${label}</strong><span>${text}</span></div>`
+      )).join("");
+      researchPdf.src = item.pdf;
+      researchOpen.href = item.pdf;
+      researchModal.classList.add("open");
+      researchModal.setAttribute("aria-hidden", "false");
+    }
+
+    function hideResearch() {
+      researchModal.classList.remove("open");
+      researchModal.setAttribute("aria-hidden", "true");
+      researchPdf.src = "";
+    }
+
+    document.querySelectorAll("[data-gallery]").forEach((card) => {
+      card.addEventListener("click", (event) => {
+        if (event.target.closest("a")) return;
+        openGallery(card.dataset.gallery);
+      });
+      card.addEventListener("keydown", (event) => {
+        if (event.key !== "Enter" && event.key !== " ") return;
+        event.preventDefault();
+        openGallery(card.dataset.gallery);
+      });
+    });
+    document.querySelectorAll("[data-research]").forEach((card) => {
+      card.addEventListener("click", (event) => {
+        if (event.target.closest("a")) return;
+        openResearch(card.dataset.research);
+      });
+    });
+    closeModal.addEventListener("click", hideGallery);
+    modal.addEventListener("click", (event) => {
+      if (event.target === modal) hideGallery();
+    });
+    closeResearch.addEventListener("click", hideResearch);
+    researchModal.addEventListener("click", (event) => {
+      if (event.target === researchModal) hideResearch();
+    });
+    modalPrev.addEventListener("click", () => renderGalleryImage(activeImage - 1));
+    modalNext.addEventListener("click", () => renderGalleryImage(activeImage + 1));
+    window.addEventListener("keydown", (event) => {
+      if (!modal.classList.contains("open")) return;
+      if (event.key === "Escape") hideGallery();
+      if (event.key === "ArrowRight") renderGalleryImage(activeImage + 1);
+      if (event.key === "ArrowLeft") renderGalleryImage(activeImage - 1);
+    });
+    window.addEventListener("keydown", (event) => {
+      if (!researchModal.classList.contains("open")) return;
+      if (event.key === "Escape") hideResearch();
+    });
+  </script>
+</body>
+</html>
