@@ -8,5 +8,5 @@ window.PORTFOLIO_LINKS = {
   report: "assets/docs/commuting-report.pdf",
   powerBI: "assets/gallery/powerbi-aging/01.jpg",
   github: "https://github.com/Coroding/Personal-portfolio-for-AI4cities",
-  visualExperiment: "#visual"
+  visualExperiment: "public/previews/ai-visual-experiments.png"
 };

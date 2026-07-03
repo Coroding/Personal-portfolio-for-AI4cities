@@ -213,6 +213,15 @@
       font-size: 13px;
       font-weight: 700;
     }
+    #workmap,
+    #ai,
+    #gis,
+    #planning,
+    #visual,
+    #research,
+    #contact {
+      display: none;
+    }
 
     .visual {
       border: 1px solid var(--line);
@@ -586,29 +595,6 @@
     .practice h2 {
       font-size: clamp(36px, 4.6vw, 64px);
     }
-    .filter-bar {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 22px;
-    }
-    .filter-bar button {
-      min-height: 34px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      background: white;
-      color: var(--muted);
-      padding: 0 12px;
-      font: inherit;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-    .filter-bar button.active {
-      background: var(--blue-deep);
-      color: white;
-      border-color: var(--blue-deep);
-    }
     .map-stage {
       position: relative;
       display: grid;
@@ -792,6 +778,111 @@
       font-size: 14px;
       line-height: 1.7;
     }
+    .featured-gallery {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+    .work-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 18px 48px rgba(47,143,216,.11);
+      transition: transform .22s ease, box-shadow .22s ease;
+    }
+    .work-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 24px 60px rgba(47,143,216,.16);
+    }
+    .work-card:hover .work-card-preview img {
+      transform: scale(1.035);
+    }
+    .work-card-preview {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: var(--blue-soft);
+    }
+    .work-card-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform .32s ease;
+    }
+    .category-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      border-radius: 999px;
+      padding: 6px 10px;
+      background: rgba(255,255,255,.9);
+      color: var(--blue-deep);
+      font-size: 12px;
+      font-weight: 700;
+      box-shadow: 0 8px 22px rgba(30,70,95,.12);
+    }
+    .work-card-body {
+      padding: 16px;
+    }
+    .work-card h3,
+    .research-card h3 {
+      margin: 0;
+      color: var(--ink);
+      font-size: 19px;
+      line-height: 1.25;
+    }
+    .work-card p,
+    .research-card p {
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.62;
+    }
+    .tag-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+    .tag-row span {
+      border-radius: 999px;
+      padding: 4px 8px;
+      background: var(--blue-soft);
+      color: var(--blue-deep);
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .work-card .button,
+    .research-card .button,
+    .evidence-card .button {
+      margin-top: 14px;
+      min-height: 34px;
+      padding: 0 13px;
+      font-size: 12px;
+    }
+    .research-dashboard-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    .research-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 15px;
+      background: rgba(255,255,255,.9);
+      box-shadow: 0 16px 42px rgba(47,143,216,.09);
+    }
+    .research-card img {
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      object-fit: cover;
+      background: var(--blue-soft);
+    }
+    .research-card-body {
+      padding: 14px;
+    }
 
     .hint {
       position: fixed;
@@ -965,7 +1056,7 @@
       .nav button { display: none; }
       .card-grid, .project-board, .paper-board,
       .workbench .slide-inner, .featured .slide-inner, .shelf .slide-inner, .practice .slide-inner,
-      .map-stage, .case-grid, .practice-grid { grid-template-columns: 1fr; }
+      .map-stage, .case-grid, .practice-grid, .featured-gallery, .research-dashboard-grid { grid-template-columns: 1fr; }
       .wide { grid-column: auto; }
       .visual img { height: 320px; }
       .comic-preview { grid-template-columns: 1fr; }
@@ -994,15 +1085,9 @@
     <a class="brand" href="#cover">Mingqi Shu</a>
     <nav class="nav" aria-label="页面导航">
       <button data-target="cover">Home</button>
-      <button data-target="workmap">Work Map</button>
-      <button data-target="featured">Cases</button>
-      <button data-target="evidence">Evidence</button>
-      <button data-target="practice">Practice</button>
-      <button data-target="ai">AI/LLM</button>
-      <button data-target="gis">GIS/Data</button>
-      <button data-target="planning">Planning</button>
-      <button data-target="visual">Visual</button>
-      <button data-target="research">Research</button>
+      <button data-target="featured">Featured Works</button>
+      <button data-target="researchdash">Research & Dashboards</button>
+      <button data-target="evidence">Evidence Shelf</button>
       <a class="download" href="assets/docs/resume.pdf">下载简历</a>
     </nav>
   </header>
@@ -1013,17 +1098,16 @@
         <div>
           <p class="label">Mingqi Shu Portfolio</p>
           <h1>From Messy Inputs to Useful Outputs</h1>
-          <p class="subtitle">舒明琦 Mingqi Shu</p>
           <p class="subtitle">Urban Planning × Data Analysis × AI Product Experiments</p>
-          <p class="lead">我关注如何把复杂城市数据、内容灵感、照片记录和项目材料，转化为清晰的分析、可体验的 Demo 和可传播的作品。</p>
+          <p class="lead">把零散照片、内容灵感、乡村资料、项目文档和城市数据，整理成可以浏览、判断和继续使用的作品。</p>
           <div class="hero-tags">
-            <span>Data to Insight</span>
-            <span>Content to Tool</span>
-            <span>Image to Evaluation</span>
-            <span>Project to Evidence</span>
+            <span>Content Tools</span>
+            <span>Map Stories</span>
+            <span>AI Workflows</span>
+            <span>Data Dashboards</span>
           </div>
           <div class="actions">
-            <a class="button primary" href="#workmap">View Projects</a>
+            <a class="button primary" href="#featured">View Projects</a>
             <a class="button" href="#evidence">View Evidence Shelf</a>
             <a class="button" href="assets/docs/resume.pdf">View Resume</a>
           </div>
@@ -1031,102 +1115,25 @@
       </div>
     </section>
 
-    <section class="slide workbench" id="workmap">
-      <div class="slide-inner">
-        <div>
-          <p class="label">Work Map</p>
-          <h2>项目地图</h2>
-          <p class="lead">我把项目放在 Data / Content 与 Research / Product 两组坐标里看：不是简单罗列成果，而是看每个作品如何从混乱输入走向可判断、可展示、可行动的输出。</p>
-          <div class="filter-bar" aria-label="项目快速筛选">
-            <button class="portfolio-filter active" type="button" data-filter="all">All</button>
-            <button class="portfolio-filter" type="button" data-filter="product">Product Demo</button>
-            <button class="portfolio-filter" type="button" data-filter="data">Data & Dashboard</button>
-            <button class="portfolio-filter" type="button" data-filter="research">Research</button>
-            <button class="portfolio-filter" type="button" data-filter="ai">AI Workflow</button>
-            <button class="portfolio-filter" type="button" data-filter="visual">Visual Story</button>
-          </div>
-        </div>
-        <div class="map-stage">
-          <div class="axis-x"><span>Data</span><span>Content</span></div>
-          <div class="axis-y"><span>Research</span><span>Product</span></div>
-          <section class="quadrant">
-            <h3>Data × Research</h3>
-            <a class="map-project" data-filter-project="research data ai" data-link-key="paper" target="_blank" rel="noreferrer">Street Walkability Inference<span class="pio">Problem: 街道评价难规模化。<br>Input: 街景图像、指标、Prompt。<br>Output: 论文、模型解释、可步行性结论。</span></a>
-            <a class="map-project" data-filter-project="research data visual" data-link-key="report" target="_blank" rel="noreferrer">2025 长三角跨城通勤年度报告<span class="pio">Problem: 出行数据难被理解。<br>Input: 通勤流、城市样本、指标。<br>Output: 报告章节、图表与结论。</span></a>
-            <a class="map-project" data-filter-project="research data" href="#gis">城市空间与城际出行研究<span class="pio">Problem: 空间关系复杂。<br>Input: POI、可达性、流动数据。<br>Output: 地图、指标和分析叙事。</span></a>
-            <a class="map-project" data-filter-project="data visual" data-link-key="powerBI" target="_blank" rel="noreferrer">Power BI 老龄化与养老服务设施看板<span class="pio">Problem: 区县差异不直观。<br>Input: 人口、年龄、床位、医护数据。<br>Output: 交互看板和异常解释。</span></a>
-          </section>
-          <section class="quadrant">
-            <h3>Content × Research / Visual Story</h3>
-            <a class="map-project" data-filter-project="visual research" href="#visual">乡村文旅案例库<span class="pio">Problem: 案例材料零散。<br>Input: 乡村资源、案例、业态。<br>Output: 可复用的内容参考库。</span></a>
-            <a class="map-project" data-filter-project="visual data" data-link-key="storyAlbumGeo" target="_blank" rel="noreferrer">地图叙事与路线可视化<span class="pio">Problem: 地点关系不易被看见。<br>Input: 照片、GPS、POI。<br>Output: 路线图、点位故事、照片墙。</span></a>
-            <a class="map-project" data-filter-project="visual ai" data-link-key="visualExperiment" target="_blank" rel="noreferrer">AI 生图/图生视频文博类实验<span class="pio">Problem: 文化内容需要更轻的表达方式。<br>Input: 图像提示词、风格参考。<br>Output: 文创印章、古画动态化等视觉实验。</span></a>
-          </section>
-          <section class="quadrant">
-            <h3>Data × Product</h3>
-            <a class="map-project" data-filter-project="product data ai" data-link-key="projectEvidenceCoach" target="_blank" rel="noreferrer">Project Evidence Coach<span class="pio">Problem: 项目材料分散，表达易空泛。<br>Input: README、docs、Demo、截图。<br>Output: 证据台账、简历 bullet、面试故事。</span></a>
-            <a class="map-project" data-filter-project="data visual" data-link-key="powerBI" target="_blank" rel="noreferrer">Power BI / Tableau 可视化练习<span class="pio">Problem: 指标与图表需要被组织。<br>Input: 表格数据、筛选维度。<br>Output: 看板、交互筛选、复盘说明。</span></a>
-            <a class="map-project" data-filter-project="data visual" href="#evidence">指标构建与报告输出样例<span class="pio">Problem: 数据结论需要可交付。<br>Input: 指标、图表、章节结构。<br>Output: 报告、图表和解释文本。</span></a>
-          </section>
-          <section class="quadrant">
-            <h3>Content × Product</h3>
-            <a class="map-project" data-filter-project="product ai" data-link-key="dontJustSave" target="_blank" rel="noreferrer">Dont Just Save<span class="pio">Problem: 收藏很多但难整理复用。<br>Input: 链接、截图、文字灵感。<br>Output: Android MVP、分类与标签流程。</span></a>
-            <a class="map-project" data-filter-project="product ai visual" data-link-key="ruralTrip" target="_blank" rel="noreferrer">RuralTrip Ops Copilot<span class="pio">Problem: 乡村资源难包装成内容。<br>Input: 调研资料、案例库、业态。<br>Output: 路线、地点卡、图文/视频脚本。</span></a>
-            <a class="map-project" data-filter-project="product visual data" data-link-key="storyAlbumGeo" target="_blank" rel="noreferrer">StoryAlbum Geo<span class="pio">Problem: 旅行照片与故事关系分散。<br>Input: GPS、时间、POI。<br>Output: 故事地图、路线图、照片墙。</span></a>
-          </section>
-        </div>
-      </div>
-    </section>
-
     <section class="slide featured" id="featured">
       <div class="slide-inner">
         <div>
-          <p class="label">Featured Case Studies</p>
-          <h2>精选案例</h2>
-          <p class="lead">每个案例都按 Problem / Input / Process / Output / Evidence 组织，强调我如何把真实材料拆开、加工，再变成一个可被体验或验证的版本。</p>
+          <p class="label">Featured Works</p>
+          <h2>精选作品</h2>
+          <p class="lead">四个作品都从具体材料出发：收藏、乡村资料、旅行照片和项目文档。它们不是单纯的想法说明，而是可以打开、浏览和继续迭代的 Demo 或工作流。</p>
         </div>
-        <div class="case-grid">
-          <article class="case-card" data-filter-project="product ai">
-            <h3>Dont Just Save｜AI 内容灵感管理工具</h3>
-            <div class="case-line"><strong>Problem</strong>收藏很多但难以整理、复用和转化为创作任务。</div>
-            <div class="case-line"><strong>Input</strong>链接、截图、文字灵感、用户手动备注。</div>
-            <div class="case-line"><strong>Process</strong>外部 App 分享、内容分类、AI 摘要、标签推荐、主题聚合。</div>
-            <div class="case-line"><strong>Output</strong>Android MVP Demo、产品流程、原型截图、项目展示页。</div>
-            <a class="button primary" data-link-key="dontJustSave" target="_blank" rel="noreferrer">Evidence</a>
-          </article>
-          <article class="case-card" data-filter-project="product ai visual">
-            <h3>RuralTrip Ops Copilot｜乡村文旅内容运营工作台</h3>
-            <div class="case-line"><strong>Problem</strong>乡村资源有特色，但难以包装成路线、地点卡和可发布内容。</div>
-            <div class="case-line"><strong>Input</strong>乡村调研资料、案例库、业态信息、目标人群。</div>
-            <div class="case-line"><strong>Process</strong>资料输入、案例检索、路线生成、地点卡片、图文/视频脚本输出。</div>
-            <div class="case-line"><strong>Output</strong>HTML 可视化 Demo、路线方案、内容生成结果。</div>
-            <a class="button primary" data-link-key="ruralTrip" target="_blank" rel="noreferrer">Evidence</a>
-          </article>
-          <article class="case-card" data-filter-project="product visual data">
-            <h3>StoryAlbum Geo｜照片故事地图</h3>
-            <div class="case-line"><strong>Problem</strong>旅行照片零散，地点、时间和故事关系难以被看见。</div>
-            <div class="case-line"><strong>Input</strong>照片 GPS、拍摄时间、POI 信息。</div>
-            <div class="case-line"><strong>Process</strong>地点解析、路线生成、原始地图与风格化 SVG 路线图双视图。</div>
-            <div class="case-line"><strong>Output</strong>旅行故事相册、路线地图、照片墙。</div>
-            <a class="button primary" data-link-key="storyAlbumGeo" target="_blank" rel="noreferrer">Evidence</a>
-          </article>
-          <article class="case-card" data-filter-project="product ai data">
-            <h3>Project Evidence Coach｜项目证据转译 Skill</h3>
-            <div class="case-line"><strong>Problem</strong>个人项目材料分散，简历表达容易空泛。</div>
-            <div class="case-line"><strong>Input</strong>GitHub README、docs、Demo、截图、部署信息。</div>
-            <div class="case-line"><strong>Process</strong>读取资料，生成 PM Case、简历 bullet、作品集结构和面试故事。</div>
-            <div class="case-line"><strong>Output</strong>项目证据台账、有效性检测指标、blocked claims 机制。</div>
-            <a class="button primary" data-link-key="projectEvidenceCoach" target="_blank" rel="noreferrer">Evidence</a>
-          </article>
-          <article class="case-card" data-filter-project="research data ai visual">
-            <h3>Street Walkability / Urban Mobility Research</h3>
-            <div class="case-line"><strong>Problem</strong>人工街道评价覆盖有限、成本高、标准不统一；出行数据也需要解释。</div>
-            <div class="case-line"><strong>Input</strong>街景图像、出行流、POI、交通可达性、城市空间数据。</div>
-            <div class="case-line"><strong>Process</strong>样本整理、指标制定、Prompt 迭代、LoRA 微调、数据清洗与图表表达。</div>
-            <div class="case-line"><strong>Output</strong>论文、年度报告、模型结果解释、数据分析图表。</div>
-            <a class="button primary" data-link-key="paper" target="_blank" rel="noreferrer">Evidence</a>
-          </article>
+        <div class="featured-gallery" id="featuredWorks"></div>
+      </div>
+    </section>
+
+    <section class="slide featured" id="researchdash">
+      <div class="slide-inner">
+        <div>
+          <p class="label">Research & Dashboards</p>
+          <h2>研究与数据作品</h2>
+          <p class="lead">这里放研究、报告和看板类作品。文字不写论文摘要，而是说明处理了什么材料、做了什么转换，以及最后产出了什么。</p>
         </div>
+        <div class="research-dashboard-grid" id="researchWorks"></div>
       </div>
     </section>
 
@@ -1134,36 +1141,10 @@
       <div class="slide-inner">
         <div>
           <p class="label">Evidence Shelf</p>
-          <h2>证据货架</h2>
-          <p class="lead">这里不写长介绍，只放能被打开、被检查、被追溯的真实产出：论文、报告、看板、Demo、Prompt 工作流和视觉实验。</p>
+          <h2>真实产出货架</h2>
+          <p class="lead">轻量资料架：只保留类型、标题、一句话说明和查看按钮，用来快速打开真实产出。</p>
         </div>
-        <div class="evidence-rail">
-          <article class="evidence-card" data-filter-project="research data ai"><span class="type-pill">Paper</span><h3>Street Walkability Paper</h3><p>街景图像与预训练大模型的街道可步行性研究。</p><a class="button primary" data-link-key="paper" target="_blank" rel="noreferrer">查看</a></article>
-          <article class="evidence-card" data-filter-project="research data visual"><span class="type-pill">Report</span><h3>2025 长三角跨城通勤年度报告</h3><p>从出行数据到指标、图表和章节叙事的报告输出。</p><a class="button primary" data-link-key="report" target="_blank" rel="noreferrer">查看</a></article>
-          <article class="evidence-card" data-filter-project="data visual"><span class="type-pill">Dashboard</span><h3>Power BI：上海老龄化与养老服务设施看板</h3><p>区县对比、异常识别、指标解释与交互筛选。</p><a class="button primary" data-link-key="powerBI" target="_blank" rel="noreferrer">查看</a></article>
-          <article class="evidence-card" data-filter-project="product ai"><span class="type-pill">Web Demo</span><h3>Dont Just Save Demo</h3><p>把收藏内容转化为可分类、可复用的创作灵感池。</p><a class="button primary" data-link-key="dontJustSave" target="_blank" rel="noreferrer">查看</a></article>
-          <article class="evidence-card" data-filter-project="product ai visual"><span class="type-pill">Web Demo</span><h3>RuralTrip Ops Copilot Demo</h3><p>乡村路线、地点卡和内容脚本生成工作台。</p><a class="button primary" data-link-key="ruralTrip" target="_blank" rel="noreferrer">查看</a></article>
-          <article class="evidence-card" data-filter-project="product visual data"><span class="type-pill">Web Demo</span><h3>StoryAlbum Geo Demo</h3><p>照片 GPS 与 POI 生成地图叙事和照片墙。</p><a class="button primary" data-link-key="storyAlbumGeo" target="_blank" rel="noreferrer">查看</a></article>
-          <article class="evidence-card" data-filter-project="product ai data"><span class="type-pill">Prompt Workflow</span><h3>Project Evidence Coach Demo</h3><p>项目材料到证据台账、简历 bullet 和面试故事。</p><a class="button primary" data-link-key="projectEvidenceCoach" target="_blank" rel="noreferrer">查看</a></article>
-          <article class="evidence-card" data-filter-project="visual ai"><span class="type-pill">Visual Experiment</span><h3>AI Visual Experiments</h3><p>文创印章、古画动态化等图像与视频表达实验。</p><a class="button primary" data-link-key="visualExperiment" target="_blank" rel="noreferrer">查看</a></article>
-        </div>
-      </div>
-    </section>
-
-    <section class="slide practice" id="practice">
-      <div class="slide-inner">
-        <div>
-          <p class="label">Practice Notes</p>
-          <h2>What I’m Practicing</h2>
-          <p class="lead">这个作品集不是为了证明我已经很成熟，而是记录我如何把真实问题拆开、用数据和 AI 工具做出可展示的版本，并持续修正自己的判断。</p>
-          <div class="about-card">About This Portfolio：我更在意“从输入到输出”的过程，包括如何整理材料、选择指标、搭建 Demo、验证表达是否可信，以及把复杂内容讲清楚。</div>
-        </div>
-        <div class="practice-grid">
-          <section class="practice-card"><h3>Product Thinking</h3><ul><li>用户场景拆解</li><li>MVP 定义</li><li>原型展示</li><li>功能流程梳理</li></ul></section>
-          <section class="practice-card"><h3>Data Sense</h3><ul><li>SQL / Python 基础数据处理</li><li>指标构建</li><li>Power BI / Tableau 看板</li><li>报告表达</li></ul></section>
-          <section class="practice-card"><h3>AI Workflow</h3><ul><li>Prompt 工作流</li><li>AI 工具辅助 Demo</li><li>Codex / Claude / ChatGPT 使用</li><li>基础模型评估与结果复盘</li></ul></section>
-          <section class="practice-card"><h3>Visual Storytelling</h3><ul><li>地图表达</li><li>图文叙事</li><li>信息可视化</li><li>AI 生图/图生视频实验</li></ul></section>
-        </div>
+        <div class="evidence-rail" id="evidenceShelf"></div>
       </div>
     </section>
 
@@ -1412,13 +1393,12 @@
   </div>
 
   <script src="assets/data/links.js"></script>
+  <script src="assets/data/projects.js"></script>
   <script src="assets/gallery-data.js"></script>
   <script>
     const deck = document.querySelector("#deck");
-    const slides = Array.from(document.querySelectorAll(".slide"));
+    const slides = Array.from(document.querySelectorAll(".slide")).filter((slide) => getComputedStyle(slide).display !== "none");
     const navButtons = Array.from(document.querySelectorAll(".nav button"));
-    const portfolioFilters = Array.from(document.querySelectorAll(".portfolio-filter"));
-    const filterableProjects = Array.from(document.querySelectorAll("[data-filter-project]"));
     const galleryMap = new Map((window.PORTFOLIO_GALLERIES || []).map((item) => [item.slug, item]));
     const modal = document.querySelector("#galleryModal");
     const modalImage = document.querySelector("#modalImage");
@@ -1438,6 +1418,8 @@
     const researchDetailGrid = document.querySelector("#researchDetailGrid");
     const researchOpen = document.querySelector("#researchOpen");
     const closeResearch = document.querySelector("#closeResearch");
+    const links = window.PORTFOLIO_LINKS || {};
+    const projects = window.PORTFOLIO_PROJECTS || {};
     const researchDetails = {
       "walkability-ai": [
         ["研究问题", "大规模街道可步行性评估需要识别哪些街道需要改善，并解释为何表现不足、如何提出空间建议。"],
@@ -1460,6 +1442,76 @@
     let activeGallery = null;
     let activeImage = 0;
 
+    function resolveLink(project) {
+      const key = project?.links?.primary;
+      return key ? (links[key] || "#") : "#";
+    }
+
+    function linkTargetAttributes(url) {
+      return url && !url.startsWith("#") ? ' target="_blank" rel="noreferrer"' : "";
+    }
+
+    function tagMarkup(tags = []) {
+      return `<div class="tag-row">${tags.map((tag) => `<span>${tag}</span>`).join("")}</div>`;
+    }
+
+    function renderPortfolioData() {
+      const featuredTarget = document.querySelector("#featuredWorks");
+      const researchTarget = document.querySelector("#researchWorks");
+      const evidenceTarget = document.querySelector("#evidenceShelf");
+      if (featuredTarget) {
+        featuredTarget.innerHTML = (projects.featured || []).map((project) => {
+          const url = resolveLink(project);
+          return `
+            <article class="work-card">
+              <a class="work-card-preview" href="${url}"${linkTargetAttributes(url)}>
+                <img src="${project.previewImage}" alt="${project.title} 预览图" loading="lazy">
+                <span class="category-badge">${project.category}</span>
+              </a>
+              <div class="work-card-body">
+                <h3>${project.title}</h3>
+                ${tagMarkup(project.tags)}
+                <p>${project.description}</p>
+                <a class="button primary" href="${url}"${linkTargetAttributes(url)}>View Project</a>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+      if (researchTarget) {
+        researchTarget.innerHTML = (projects.research || []).map((project) => {
+          const url = resolveLink(project);
+          return `
+            <article class="research-card">
+              <a href="${url}"${linkTargetAttributes(url)}><img src="${project.previewImage}" alt="${project.title} 缩略图" loading="lazy"></a>
+              <div class="research-card-body">
+                <span class="type-pill">${project.category}</span>
+                <h3>${project.title}</h3>
+                ${tagMarkup(project.tags)}
+                <p>${project.description}</p>
+                <a class="button primary" href="${url}"${linkTargetAttributes(url)}>View Project</a>
+              </div>
+            </article>
+          `;
+        }).join("");
+      }
+      if (evidenceTarget) {
+        evidenceTarget.innerHTML = (projects.evidence || []).map((project) => {
+          const url = resolveLink(project);
+          return `
+            <article class="evidence-card">
+              <span class="type-pill">${project.category}</span>
+              <h3>${project.title}</h3>
+              <p>${project.description}</p>
+              <a class="button primary" href="${url}"${linkTargetAttributes(url)}>查看</a>
+            </article>
+          `;
+        }).join("");
+      }
+    }
+
+    renderPortfolioData();
+
     function go(index) {
       current = Math.max(0, Math.min(slides.length - 1, index));
       slides[current].scrollIntoView({ behavior: "smooth", inline: "start", block: "nearest" });
@@ -1477,16 +1529,6 @@
       button.addEventListener("click", () => {
         const index = slides.findIndex((slide) => slide.id === button.dataset.target);
         go(index);
-      });
-    });
-    portfolioFilters.forEach((button) => {
-      button.addEventListener("click", () => {
-        const mode = button.dataset.filter;
-        portfolioFilters.forEach((item) => item.classList.toggle("active", item === button));
-        filterableProjects.forEach((item) => {
-          const tags = (item.dataset.filterProject || "").split(/\s+/);
-          item.classList.toggle("project-muted", mode !== "all" && !tags.includes(mode));
-        });
       });
     });
     document.querySelectorAll("[data-link-key]").forEach((link) => {
